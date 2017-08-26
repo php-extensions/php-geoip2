@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta content="geoip2 API doc" name="description">
+    <title>
+                    geoip2 API Documentation
+            </title>
+    <link rel="stylesheet" type="text/css" href="../../../asset/static/prettify.css" />
+
+<script src="../../../asset/static/prettify.js"></script>
+<script src="../../../asset/api_definition.js"></script>
+
+
+                        <link rel="stylesheet" type="text/css" href="../../../asset/static/prettify.css" />
+                    <link rel="stylesheet" type="text/css" href="../../../asset/static/zephir-theme.css" />
+            
+    
+
+                        <script src="../../../asset/static/prettify.js"></script>
+                                    <script src="../../../asset/api_definition.js"></script>
+                    <script src="../../../asset/static/jquery.min.js"></script>
+                    <script src="../../../asset/static/zephir-doc.js"></script>
+                <script>var ZepCurrentPath = '../../../'</script>
+    </head>
+ <body onload="prettyPrint()">
+        <div id="top-bar">
+            <div id="top-left">
+                                    geoip2 Documentation <span class="version">v0.9.0</span>
+                            </div>
+            <div id="top-right">
+            </div>
+        </div>
+        <div id="body">
+            <div id="body-left">
+                <div class="header-search">
+                    <input class="search-box" placeholder="Search for a class or namespace " type="text" />
+                    <div id="menu-wrapper">
+                    </div>
+                </div>
+            </div>
+            <div id="body-right">
+                <div class="content">
+                    
+<div class="breadcrumb">
+    
+    <ul>
+        
+        <li><a href="../../../index.html">Home</a></li>
+        
+                <li><a href="../../../classes.html">Classes</a></li>
+                <li><a href="../../../class/GeoIP2/Record/AbstractPlaceRecord.html">GeoIP2\Record\AbstractPlaceRecord</a></li>
+                <li><a >Source</a></li>
+                
+    </ul>
+    
+</div>
+<div class="class-header source clearfix">
+    
+    <div class="access-buttons">
+        <a class="zep-button" href="../../../class/GeoIP2/Record/AbstractPlaceRecord.html">Class</a>
+
+            </div>
+    
+    <div class="class-full-name">
+        
+        <span class="class-type">Class</span>
+        
+                <span class="namespace-piece">
+            <a href="../../../namespace/GeoIP2.html">GeoIP2</a>
+        </span>
+                <span class="namespace-piece">
+            <a href="../../../namespace/GeoIP2/Record.html">Record</a>
+        </span>
+                <h1 class="class-name">AbstractPlaceRecord</h1>
+    </div>
+    
+</div>
+
+
+<pre class="zephir-source-file prettyprint linenums">namespace GeoIP2\Record;
+
+abstract class AbstractPlaceRecord extends AbstractRecord
+{
+    protected locales;
+
+    /**
+     * @ignore
+     *
+     * @param mixed $record
+     * @param mixed $locales
+     */
+    public function __construct(var record, array locales = ["en"])
+    {
+        let this->locales = locales;
+        parent::__construct(record);
+        this->filterLocales(locales);
+    }
+
+    protected function filterLocales(array locales)
+    {
+        var locale;
+        if isset this->record["names"] {
+            var validLocales = array_keys(this->record["names"]);
+
+            array _locales = [];
+            for locale in locales {
+                if in_array(locale, validLocales) {
+                    let _locales[] =  locale;
+                }
+            }
+            if !empty _locales {
+                let locales = _locales;
+
+                array names = [];
+
+                for locale in locales {
+                    if isset this->record["names"][locale] {
+                        let names[locale] = this->record["names"][locale];
+                    }
+                }
+                let this->record["names"] = names;
+            } else {
+                let locales = validLocales;
+            }
+            let this->locales = locales;
+        }
+    }
+
+    /**
+     * @ignore
+     *
+     * @param mixed $attr
+     */
+    public function __get(string attr)
+    {
+        if attr == "name" {
+            return this->name();
+        }
+        if attr == "code" {
+            let attr = "isoCode";
+        }
+        if attr == "locales" {
+            return this->locales;
+        }
+        return parent::__get(attr);
+    }
+    /**
+     * @ignore
+     *
+     * @param mixed $attr
+     */
+    public function __isset(string attr)
+    {
+        if (attr === "name") {
+            return this->firstSetNameLocale() === null ? false : true;
+        }
+        return parent::__isset(attr);
+    }
+    private function name()
+    {
+        var locale;
+        let locale = this->firstSetNameLocale();
+        return locale === null ? null : this->record["names"][locale];
+    }
+    private function firstSetNameLocale()
+    {
+        var locale;
+        for locale in this->locales {
+            if isset this->record["names"][locale] {
+                return locale;
+            }
+        }
+        return null;
+    }
+}</pre>                </div>
+            </div>
+        </div>
+    </body>
+</html>
