@@ -1,15 +1,17 @@
-
 namespace GeoIP2\Database;
 
 use GeoIP2\Exception\AddressNotFoundException;
 use GeoIP2\Exception\InvalidDatabaseException;
 use GeoIP2\ProviderInterface;
+use GeoIP2\Database\Reader\Metadata;
 use MaxMind\Db\Reader as DbReader;
 
 class Reader implements ProviderInterface
 {
     private dbReader;
     private locales;
+
+    private metadata;
 
     /**
      * Constructor.
@@ -28,7 +30,6 @@ class Reader implements ProviderInterface
         } elseif typeof locales == "string" {
             let this->locales = [locales];
         }
-        //let this->locales = locales;
     }
 
     /**
@@ -219,6 +220,35 @@ class Reader implements ProviderInterface
         }
         return record;
     }
+
+    /**
+     * @return \GeoIP2\Database\Reader\Metadata object for the database
+     */
+    public function metadata()
+    {
+        if empty this->metadata {
+            var md = [
+                "binary_format_major_version": "",
+                "binary_format_minor_version": "",
+                "build_epoch": "",
+                "database_type": "",
+                "languages": "",
+                "description": "",
+                "ip_version": "",
+                "node_count": 0,
+                "record_size": 0
+            ];
+            var record = this->dbReader->get("128.101.101.101");
+            if isset record["city"]["names"] {
+                let md["database_type"] = "GeoIP2-City";
+            } elseif isset record["country"]["names"] {
+                let md["database_type"] = "GeoIP2-Country";
+            }
+            let this->metadata = new Metadata(md);
+        }
+        return this->metadata;
+    }
+
     /**
      * Closes the GeoIP2 database and returns the resources to the system.
      */

@@ -56,7 +56,7 @@
     "name": "geoip2",
     "description": "GeoIP2 PHP API",
     "author": "github.com/php-extensions",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "verbose": false,
     "requires": {
         "extensions": ["maxminddb", "json"]
