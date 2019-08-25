@@ -29,6 +29,7 @@ class Country extends AbstractPlaceRecord
         "confidence",
         "geonameId",
         "isoCode",
-        "names"
+        "names",
+        "name"
     ];
 }

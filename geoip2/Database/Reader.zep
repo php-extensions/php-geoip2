@@ -2,9 +2,10 @@ namespace GeoIP2\Database;
 
 use GeoIP2\Exception\AddressNotFoundException;
 use GeoIP2\Exception\InvalidDatabaseException;
+use GeoIP2\Exception\GeoIP2Exception;
 use GeoIP2\ProviderInterface;
 use GeoIP2\Database\Reader\Metadata;
-use MaxMind\Db\Reader as DbReader;
+use GeoIP2\MaxMind\Db\Reader as DbReader;
 
 class Reader implements ProviderInterface
 {
@@ -24,7 +25,7 @@ class Reader implements ProviderInterface
      *                                                     is corrupt or invalid
      */
     public function __construct(string filename, var locales = "") {
-        let this->dbReader = <MaxMind\Db\Reader> new DbReader(filename);
+        let this->dbReader = <GeoIP2\MaxMind\Db\Reader> new DbReader(filename);
         if typeof locales == "array" {
             let this->locales = locales;
         } elseif typeof locales == "string" {
@@ -180,13 +181,28 @@ class Reader implements ProviderInterface
             ipAddress
         );
     }
+
+    public function custom(string ipAddress)
+        {
+            return this->flatModelFor(
+                "Custom",
+                "Custom",
+                ipAddress
+            );
+        }
+
+
     private function modelFor(string className, string type, string ipAddress)
     {
         var record;
         let record = this->getRecord(className, type, ipAddress);
         let record["traits"]["ip_address"] = ipAddress;
         let className = "GeoIP2\\Model\\" . className;
-        return new {className}(record, this->locales);
+        if class_exists(className) {
+            return new {className}(record, this->locales);
+        }
+
+        throw new GeoIP2Exception("Unknown record type");
     }
     private function flatModelFor(string className, string type, string ipAddress)
     {
@@ -221,32 +237,46 @@ class Reader implements ProviderInterface
         return record;
     }
 
+
+//    /**
+//     * @return \GeoIP2\Database\Reader\Metadata object for the database
+//     */
+
+//    public function metadata()
+//    {
+//        if empty this->metadata {
+//            var md = [
+//                "binary_format_major_version": "",
+//                "binary_format_minor_version": "",
+//                "build_epoch": "",
+//                "database_type": "",
+//                "languages": "",
+//                "description": "",
+//                "ip_version": "",
+//                "node_count": 0,
+//                "record_size": 0
+//            ];
+//            var record = this->dbReader->get("128.101.101.101");
+//            if isset record["city"]["names"] {
+//                let md["database_type"] = "GeoIP2-City";
+//            } elseif isset record["country"]["names"] {
+//                let md["database_type"] = "GeoIP2-Country";
+//            }
+//            let this->metadata = new Metadata(md);
+//        }
+//        return this->metadata;
+//    }
+
+
     /**
-     * @return \GeoIP2\Database\Reader\Metadata object for the database
+     * @throws \InvalidArgumentException if arguments are passed to the method
+     * @throws \BadMethodCallException   if the database has been closed
+     *
+     * @return \GeoIP2\MaxMind\Db\Reader\Metadata object for the database
      */
     public function metadata()
     {
-        if empty this->metadata {
-            var md = [
-                "binary_format_major_version": "",
-                "binary_format_minor_version": "",
-                "build_epoch": "",
-                "database_type": "",
-                "languages": "",
-                "description": "",
-                "ip_version": "",
-                "node_count": 0,
-                "record_size": 0
-            ];
-            var record = this->dbReader->get("128.101.101.101");
-            if isset record["city"]["names"] {
-                let md["database_type"] = "GeoIP2-City";
-            } elseif isset record["country"]["names"] {
-                let md["database_type"] = "GeoIP2-Country";
-            }
-            let this->metadata = new Metadata(md);
-        }
-        return this->metadata;
+        return this->dbReader->metadata();
     }
 
     /**

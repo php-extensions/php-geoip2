@@ -1,30 +1,75 @@
-# PHP GeoIP2 extension #
+# PHP GeoIP2 extension
 
-## Description ##
+## Description
 
-This package provides an API for the GeoIP2
-[databases](http://dev.maxmind.com/geoip/geoip2/downloadable). The API also
-works with the free
+This extension provides an API for the MaxMind
+[GeoIP2 databases](http://dev.maxmind.com/geoip/geoip2/downloadable) and free
 [GeoLite2 databases](http://dev.maxmind.com/geoip/geoip2/geolite2/).
 
-### Dependencies ###
+This extension is a port of the official [MaxMind GeoIP2 PHP package](https://github.com/maxmind/GeoIP2-php)
+and [MaxMind DB Reader PHP package](https://github.com/maxmind/MaxMind-DB-Reader-php).
+It is written in Zephir and converted to C.
 
-This extension depends on:
+### Requirements
+
+Since version 0.9.2 this extension requires PHP 7 or greater.
+
+### Building extension
+
+#### Prerequisites
+
+Since version 0.9.2, gcc 7+ is required. To enable it on CentOS:
 
 ```
-php-maxminddb
-php-json
+yum install -y yum-utils  centos-release-scl
+yum -y --enablerepo=centos-sclo-rh-testing install devtoolset-7-gcc
+echo "source /opt/rh/devtoolset-7/enable" | sudo tee -a /etc/profile
+source /opt/rh/devtoolset-7/enable
 ```
 
-## IP Geolocation Usage ##
+Building with Zephir (recommended)
+
+```
+zephir compile
+zephir install
+```
+
+Building without Zephir
+
+```
+cd ext
+phpize
+./configure
+make
+make install
+```
+
+This extension can also read custom databases created using
+[MaxMind DB Writer](https://github.com/maxmind/MaxMind-DB-Writer-perl]).
+
+```
+use GeoIP2\Database\Reader;
+
+$ipAddress = '8.8.8.8';
+$databaseFile = 'mydb.mmdb';
+
+$reader = new Reader($databaseFile);
+
+print_r($record = $reader->custom($ipAddress));
+
+print_r($record->raw['color']);
+print_r($record->get('dogs'));
+```
+
+## IP Geolocation Usage
 
 IP geolocation is inherently imprecise. Locations are often near the center of
 the population. Any location provided by a GeoIP2 database or web service
 should not be used to identify a particular address or household.
 
-## Database Reader ##
+## Database Reader
 
-### Usage ###
+### Usage
 
 To use this API, you must create a new `\GeoIP2\Database\Reader` object with
 the path to the database file as the first argument to the constructor. You
@@ -41,7 +86,7 @@ is thrown. If the database is invalid or corrupt, a
 
 See the API documentation for more details.
 
-### City Example ###
+### City Example
 
 ```php
 <?php
@@ -72,7 +117,7 @@ print($record->location->longitude . "\n"); // -93.2323
 
 ```
 
-### Anonymous IP Example ###
+### Anonymous IP Example
 
 ```php
 <?php
@@ -90,7 +135,7 @@ print($record->ipAddress . "\n"); // '128.101.101.101'
 
 ```
 
-### Connection-Type Example ###
+### Connection-Type Example
 
 ```php
 <?php
@@ -108,7 +153,7 @@ print($record->ipAddress . "\n"); // '128.101.101.101'
 
 ```
 
-### Domain Example ###
+### Domain Example
 
 ```php
 <?php
@@ -126,7 +171,7 @@ print($record->ipAddress . "\n"); // '128.101.101.101'
 
 ```
 
-### Enterprise Example ###
+### Enterprise Example
 
 ```php
 <?php
@@ -160,7 +205,7 @@ print($record->location->longitude . "\n"); // -93.2323
 
 ```
 
-### ISP Example ###
+### ISP Example
 
 ```php
 <?php
@@ -182,7 +227,7 @@ print($record->ipAddress . "\n"); // '128.101.101.101'
 
 ```
 
-## Values to use for Database or Array Keys ##
+## Values to use for Database or Array Keys
 
 **We strongly discourage you from using a value from any `names` property as
 a key in a database or array.**
@@ -196,7 +241,7 @@ following:
   `$country->isoCode` or `$country->geonameId`
 * `GeoIP2\Record\Subdivision` - `$subdivision->isoCode` or `$subdivision->geonameId`
 
-### What data is returned? ###
+### What data is returned?
 
 While many of the end points return the same basic records, the attributes
 which can be populated vary between end points. In addition, while an end
@@ -213,7 +258,7 @@ for details on what data each end point may return.
 The only piece of data which is always returned is the `ipAddress`
 attribute in the `GeoIP2\Record\Traits` record.
 
-## Integration with GeoNames ##
+## Integration with GeoNames
 
 [GeoNames](http://www.geonames.org/) offers web services and downloadable
 databases with data on geographical features around the world, including
@@ -228,7 +273,7 @@ Some of the data that MaxMind provides is also sourced from GeoNames. We
 source things like place names, ISO codes, and other similar data from
 the GeoNames premium data set.
 
-## Reporting data problems ##
+## Reporting data problems
 
 If the problem you find is that an IP address is incorrectly mapped,
 please
@@ -246,7 +291,7 @@ If you are a paying MaxMind customer and you're not sure where to submit
 a correction, please
 [contact MaxMind support](http://www.maxmind.com/en/support) for help.
 
-## Other Support ##
+## Other Support
 
 Please report all issues with this code using the
 [GitHub issue tracker](https://github.com/php-extensions/php-geoip2/issues).
@@ -254,18 +299,3 @@ Please report all issues with this code using the
 If you are having an issue with a MaxMind service that is not specific
 to the client API, please see
 [MaxMind support page](http://www.maxmind.com/en/support).
-
-## Requirements  ##
-
-This library requires PHP 5.4 or greater.
-
-This library also relies on the [MaxMind DB Reader](https://github.com/maxmind/MaxMind-DB-Reader-php).
-
-## Contributing ##
-
-Patches and pull requests are encouraged. All code should follow the PSR-2
-style guidelines. Please include unit tests whenever possible. You may obtain
-the test data for the maxmind-db folder by running `git submodule update
---init --recursive` or adding `--recursive` to your initial clone, or from
-https://github.com/maxmind/MaxMind-DB
-

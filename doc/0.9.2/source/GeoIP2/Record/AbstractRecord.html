@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta content="geoip2 API doc" name="description">
+    <title>
+                    geoip2 API Documentation
+            </title>
+    <link rel="stylesheet" type="text/css" href="../../../asset/static/prettify.css" />
+
+<script src="../../../asset/static/prettify.js"></script>
+<script src="../../../asset/api_definition.js"></script>
+
+
+                        <link rel="stylesheet" type="text/css" href="../../../asset/static/prettify.css" />
+                    <link rel="stylesheet" type="text/css" href="../../../asset/static/zephir-theme.css" />
+            
+    
+
+                        <script src="../../../asset/static/prettify.js"></script>
+                                    <script src="../../../asset/api_definition.js"></script>
+                    <script src="../../../asset/static/jquery.min.js"></script>
+                    <script src="../../../asset/static/zephir-doc.js"></script>
+                <script>var ZepCurrentPath = '../../../'</script>
+    </head>
+ <body onload="prettyPrint()">
+        <div id="top-bar">
+            <div id="top-left">
+                                    geoip2 Documentation <span class="version">v0.9.2</span>
+                            </div>
+            <div id="top-right">
+            </div>
+        </div>
+        <div id="body">
+            <div id="body-left">
+                <div class="header-search">
+                    <input class="search-box" placeholder="Search for a class or namespace " type="text" />
+                    <div id="menu-wrapper">
+                    </div>
+                </div>
+            </div>
+            <div id="body-right">
+                <div class="content">
+                    
+<div class="breadcrumb">
+    
+    <ul>
+        
+        <li><a href="../../../index.html">Home</a></li>
+        
+                <li><a href="../../../classes.html">Classes</a></li>
+                <li><a href="../../../class/GeoIP2/Record/AbstractRecord.html">GeoIP2\Record\AbstractRecord</a></li>
+                <li><a >Source</a></li>
+                
+    </ul>
+    
+</div>
+<div class="class-header source clearfix">
+    
+    <div class="access-buttons">
+        <a class="zep-button" href="../../../class/GeoIP2/Record/AbstractRecord.html">Class</a>
+
+            </div>
+    
+    <div class="class-full-name">
+        
+        <span class="class-type">Class</span>
+        
+                <span class="namespace-piece">
+            <a href="../../../namespace/GeoIP2.html">GeoIP2</a>
+        </span>
+                <span class="namespace-piece">
+            <a href="../../../namespace/GeoIP2/Record.html">Record</a>
+        </span>
+                <h1 class="class-name">AbstractRecord</h1>
+    </div>
+    
+</div>
+
+
+<pre class="zephir-source-file prettyprint linenums">namespace GeoIP2\Record;
+
+abstract class AbstractRecord implements \JsonSerializable
+{
+    protected validAttributes;
+
+    protected record = [];
+    /**
+     * @ignore
+     *
+     * @param mixed $record
+     */
+    public function __construct(var record)
+    {
+        if !empty record {
+            let this->record = record;
+        }
+    }
+    /**
+     * @ignore
+     *
+     * @param mixed $attr
+     */
+    public function __get(string attr)
+    {
+        var key;
+        let key = this->attributeToKey(attr);
+        if this->__isset(attr) {
+            return this->record[key];
+        } elseif this->validAttribute(attr) {
+            if (preg_match("/^is_/", key)) {
+                return false;
+            }
+            return null;
+        }
+        throw new \RuntimeException("Unknown attribute: " . attr);
+    }
+
+//    public function has(string attr)
+//    {
+//        if this->__isset(attr) {
+//            return true;
+//        }
+//        return false;
+//    }
+
+    public function getName(string name)
+    {
+        if isset this->record["names"][name] {
+            return this->record["names"][name];
+        }
+        return null;
+    }
+
+    public function __isset(string attr)
+    {
+        return this->validAttribute(attr) &&
+             isset this->record[this->attributeToKey(attr)];
+    }
+    private function attributeToKey(string attr)
+    {
+        var v;
+        let v = preg_replace("/([A-Z])/", "_\1", attr);
+        return strtolower(v);
+    }
+    private function validAttribute(string attr)
+    {
+        return in_array(attr, this->validAttributes, true);
+    }
+    public function jsonSerialize()
+    {
+        return this->record;
+    }
+    public function json(int options = 0)
+    {
+        return json_encode(this->record, options);
+    }
+}</pre>                </div>
+            </div>
+        </div>
+    </body>
+</html>

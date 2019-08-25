@@ -21,7 +21,7 @@ abstract class AbstractPlaceRecord extends AbstractRecord
     {
         var locale;
         if isset this->record["names"] {
-            var validLocales = array_keys(this->record["names"]);
+            array validLocales = (array)array_keys(this->record["names"]);
 
             array _locales = [];
             for locale in locales {
@@ -58,7 +58,9 @@ abstract class AbstractPlaceRecord extends AbstractRecord
             return this->name();
         }
         if attr == "code" {
-            let attr = "isoCode";
+            if !this->__isset(attr) {
+                let attr = "isoCode";
+            }
         }
         if attr == "locales" {
             return this->locales;
@@ -86,6 +88,11 @@ abstract class AbstractPlaceRecord extends AbstractRecord
     private function firstSetNameLocale()
     {
         var locale;
+
+        if in_array("en", this->locales) {
+            return "en";
+        }
+
         for locale in this->locales {
             if isset this->record["names"][locale] {
                 return locale;

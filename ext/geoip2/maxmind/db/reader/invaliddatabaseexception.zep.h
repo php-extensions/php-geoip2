@@ -1,0 +1,5 @@
+
+extern zend_class_entry *geoip2_maxmind_db_reader_invaliddatabaseexception_ce;
+
+ZEPHIR_INIT_CLASS(GeoIP2_MaxMind_Db_Reader_InvalidDatabaseException);
+

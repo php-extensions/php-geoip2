@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta content="geoip2 API doc" name="description">
+    <title>
+                    geoip2 API Documentation
+            </title>
+    <link rel="stylesheet" type="text/css" href="../../../asset/static/prettify.css" />
+
+<script src="../../../asset/static/prettify.js"></script>
+<script src="../../../asset/api_definition.js"></script>
+
+
+                        <link rel="stylesheet" type="text/css" href="../../../asset/static/prettify.css" />
+                    <link rel="stylesheet" type="text/css" href="../../../asset/static/zephir-theme.css" />
+            
+    
+
+                        <script src="../../../asset/static/prettify.js"></script>
+                                    <script src="../../../asset/api_definition.js"></script>
+                    <script src="../../../asset/static/jquery.min.js"></script>
+                    <script src="../../../asset/static/zephir-doc.js"></script>
+                <script>var ZepCurrentPath = '../../../'</script>
+    </head>
+ <body onload="prettyPrint()">
+        <div id="top-bar">
+            <div id="top-left">
+                                    geoip2 Documentation <span class="version">v0.9.2</span>
+                            </div>
+            <div id="top-right">
+            </div>
+        </div>
+        <div id="body">
+            <div id="body-left">
+                <div class="header-search">
+                    <input class="search-box" placeholder="Search for a class or namespace " type="text" />
+                    <div id="menu-wrapper">
+                    </div>
+                </div>
+            </div>
+            <div id="body-right">
+                <div class="content">
+                    
+<div class="breadcrumb">
+    
+    <ul>
+        
+        <li><a href="../../../index.html">Home</a></li>
+        
+                <li><a href="../../../classes.html">Classes</a></li>
+                <li><a href="../../../class/GeoIP2/Model/Country.html">GeoIP2\Model\Country</a></li>
+                <li><a >Source</a></li>
+                
+    </ul>
+    
+</div>
+<div class="class-header source clearfix">
+    
+    <div class="access-buttons">
+        <a class="zep-button" href="../../../class/GeoIP2/Model/Country.html">Class</a>
+
+            </div>
+    
+    <div class="class-full-name">
+        
+        <span class="class-type">Class</span>
+        
+                <span class="namespace-piece">
+            <a href="../../../namespace/GeoIP2.html">GeoIP2</a>
+        </span>
+                <span class="namespace-piece">
+            <a href="../../../namespace/GeoIP2/Model.html">Model</a>
+        </span>
+                <h1 class="class-name">Country</h1>
+    </div>
+    
+</div>
+
+
+<pre class="zephir-source-file prettyprint linenums">namespace GeoIP2\Model;
+/**
+ * Model class for the data returned by GeoIP2 Country web service and database.
+ *
+ * The only difference between the City and Insights model classes is which
+ * fields in each record may be populated. See
+ * http://dev.maxmind.com/geoip/geoip2/web-services more details.
+ *
+ * @property-read \GeoIp2\Record\Continent $continent Continent data for the
+ * requested IP address.
+ * @property-read \GeoIp2\Record\Country $country Country data for the requested
+ * IP address. This object represents the country where MaxMind believes the
+ * end user is located.
+ * @property-read \GeoIp2\Record\MaxMind $maxmind Data related to your MaxMind
+ * account.
+ * @property-read \GeoIp2\Record\Country $registeredCountry Registered country
+ * data for the requested IP address. This record represents the country
+ * where the ISP has registered a given IP block and may differ from the
+ * user's country.
+ * @property-read \GeoIp2\Record\RepresentedCountry $representedCountry
+ * Represented country data for the requested IP address. The represented
+ * country is used for things like military bases. It is only present when
+ * the represented country differs from the country.
+ * @property-read \GeoIp2\Record\Traits $traits Data for the traits of the
+ * requested IP address.
+ */
+class Country extends AbstractModel
+{
+    protected continent;
+    protected country;
+    protected locales;
+    protected registeredCountry;
+    protected representedCountry;
+    protected traits;
+
+    /**
+     * @ignore
+     *
+     * @param mixed $raw
+     * @param mixed $locales
+     */
+    public function __construct(var raw, array locales = ["en"])
+    {
+        parent::__construct($raw);
+        let this->continent = new \GeoIp2\Record\Continent(
+            this->get("continent"),
+            locales
+        );
+        let this->country = new \GeoIp2\Record\Country(
+            this->get("country"),
+            locales
+        );
+        let this->registeredCountry = new \GeoIp2\Record\Country(
+            this->get("registered_country"),
+            locales
+        );
+        let this->representedCountry = new \GeoIp2\Record\RepresentedCountry(
+            this->get("represented_country"),
+            locales
+        );
+        let this->traits = new \GeoIp2\Record\Traits(this->get("traits"));
+        let this->locales = locales;
+    }
+}</pre>                </div>
+            </div>
+        </div>
+    </body>
+</html>

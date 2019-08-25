@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta content="geoip2 API doc" name="description">
+    <title>
+                    geoip2 API Documentation
+            </title>
+    <link rel="stylesheet" type="text/css" href="../../../asset/static/prettify.css" />
+
+<script src="../../../asset/static/prettify.js"></script>
+<script src="../../../asset/api_definition.js"></script>
+
+
+                        <link rel="stylesheet" type="text/css" href="../../../asset/static/prettify.css" />
+                    <link rel="stylesheet" type="text/css" href="../../../asset/static/zephir-theme.css" />
+            
+    
+
+                        <script src="../../../asset/static/prettify.js"></script>
+                                    <script src="../../../asset/api_definition.js"></script>
+                    <script src="../../../asset/static/jquery.min.js"></script>
+                    <script src="../../../asset/static/zephir-doc.js"></script>
+                <script>var ZepCurrentPath = '../../../'</script>
+    </head>
+ <body onload="prettyPrint()">
+        <div id="top-bar">
+            <div id="top-left">
+                                    geoip2 Documentation <span class="version">v0.9.2</span>
+                            </div>
+            <div id="top-right">
+            </div>
+        </div>
+        <div id="body">
+            <div id="body-left">
+                <div class="header-search">
+                    <input class="search-box" placeholder="Search for a class or namespace " type="text" />
+                    <div id="menu-wrapper">
+                    </div>
+                </div>
+            </div>
+            <div id="body-right">
+                <div class="content">
+                    
+<div class="breadcrumb">
+    
+    <ul>
+        
+        <li><a href="../../../index.html">Home</a></li>
+        
+                <li><a href="../../../classes.html">Classes</a></li>
+                <li><a href="../../../class/GeoIP2/Record/Traits.html">GeoIP2\Record\Traits</a></li>
+                <li><a >Source</a></li>
+                
+    </ul>
+    
+</div>
+<div class="class-header source clearfix">
+    
+    <div class="access-buttons">
+        <a class="zep-button" href="../../../class/GeoIP2/Record/Traits.html">Class</a>
+
+            </div>
+    
+    <div class="class-full-name">
+        
+        <span class="class-type">Class</span>
+        
+                <span class="namespace-piece">
+            <a href="../../../namespace/GeoIP2.html">GeoIP2</a>
+        </span>
+                <span class="namespace-piece">
+            <a href="../../../namespace/GeoIP2/Record.html">Record</a>
+        </span>
+                <h1 class="class-name">Traits</h1>
+    </div>
+    
+</div>
+
+
+<pre class="zephir-source-file prettyprint linenums">namespace GeoIP2\Record;
+/**
+ * Contains data for the traits record associated with an IP address.
+ *
+ * This record is returned by all location services and databases.
+ *
+ * @property-read int|null $autonomousSystemNumber The
+ * {@link * http://en.wikipedia.org/wiki/Autonomous_system_(Internet) autonomous
+ * system number} associated with the IP address. This attribute is only
+ * available from the City and Insights web service and the GeoIP2
+ * Enterprise database.
+ * @property-read string|null $autonomousSystemOrganization The organization
+ * associated with the registered {@link * http://en.wikipedia.org/wiki/Autonomous_system_(Internet) autonomous
+ * system number} for the IP address. This attribute is only available from
+ * the City and Insights web service and the GeoIP2 Enterprise
+ * database.
+ * @property-read string|null $connectionType The connection type may take the
+ * following  values: "Dialup", "Cable/DSL", "Corporate", "Cellular".
+ * Additional values may be added in the future. This attribute is only
+ * available in the GeoIP2 Enterprise database.
+ * @property-read string|null $domain The second level domain associated with the
+ * IP address. This will be something like "example.com" or "example.co.uk",
+ * not "foo.example.com". This attribute is only available from the
+ * City and Insights web service and the GeoIP2 Enterprise
+ * database.
+ * @property-read string $ipAddress The IP address that the data in the model
+ * is for. If you performed a "me" lookup against the web service, this
+ * will be the externally routable IP address for the system the code is
+ * running on. If the system is behind a NAT, this may differ from the IP
+ * address locally assigned to it. This attribute is returned by all end
+ * points.
+ * @property-read bool $isAnonymousProxy *Deprecated.* Please see our
+ * {@link * https://www.maxmind.com/en/geoip2-anonymous-ip-database GeoIP2
+ * Anonymous IP database} to determine whether the IP address is used by an
+ * anonymizing service.
+ * @property-read bool $isLegitimateProxy This attribute is true if MaxMind
+ * believes this IP address to be a legitimate proxy, such as an internal
+ * VPN used by a corporation. This attribute is only available in the GeoIP2
+ * Enterprise database.
+ * @property-read bool $isSatelliteProvider *Deprecated.* Due to the
+ * increased coverage by mobile carriers, very few satellite providers now
+ * serve multiple countries. As a result, the output does not provide
+ * sufficiently relevant data for us to maintain it.
+ * @property-read string|null $isp The name of the ISP associated with the IP
+ * address. This attribute is only available from the City and Insights web
+ * services and the GeoIP2 Enterprise database.
+ * @property-read string|null $organization The name of the organization associated
+ * with the IP address. This attribute is only available from the City and
+ * Insights web services and the GeoIP2 Enterprise database.
+ * @property-read string|null $userType <p>The user type associated with the IP
+ *  address. This can be one of the following values:</p>
+ *  <ul>
+ *    <li>business
+ *    <li>cafe
+ *    <li>cellular
+ *    <li>college
+ *    <li>content_delivery_network
+ *    <li>dialup
+ *    <li>government
+ *    <li>hosting
+ *    <li>library
+ *    <li>military
+ *    <li>residential
+ *    <li>router
+ *    <li>school
+ *    <li>search_engine_spider
+ *    <li>traveler
+ * </ul>
+ * <p>
+ *   This attribute is only available from the Insights web service and the
+ *   GeoIP2 Enterprise database.
+ * </p>
+ */
+class Traits extends AbstractRecord
+{
+    /**
+     * @ignore
+     */
+    protected validAttributes = [
+        "autonomousSystemNumber",
+        "autonomousSystemOrganization",
+        "connectionType",
+        "domain",
+        "isAnonymousProxy",
+        "isLegitimateProxy",
+        "isSatelliteProvider",
+        "isp",
+        "ipAddress",
+        "organization",
+        "userType"
+    ];
+}</pre>                </div>
+            </div>
+        </div>
+    </body>
+</html>

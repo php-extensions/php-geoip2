@@ -20,7 +20,7 @@ abstract class AbstractModel implements \JsonSerializable
      *
      * @param mixed $field
      */
-    protected function get(string field)
+    public function get(string field)
     {
         if isset this->raw[field] {
             return this->raw[field];
@@ -35,7 +35,7 @@ abstract class AbstractModel implements \JsonSerializable
      *
      * @param mixed $attr
      */
-    public function __get($attr)
+    public function __get(string attr)
     {
         if attr != "instance" && property_exists(this, attr) {
             return this->{attr};
@@ -47,7 +47,7 @@ abstract class AbstractModel implements \JsonSerializable
      *
      * @param mixed $attr
      */
-    public function __isset(attr)
+    public function __isset(string attr)
     {
         return attr !== "instance" && isset this->{attr};
     }
@@ -57,8 +57,8 @@ abstract class AbstractModel implements \JsonSerializable
         return this->raw;
     }
 
-    public function json(int options = 0)
-    {
-        return json_encode(this, options);
-    }
+//    public function json(int options = 0)
+//    {
+//        return json_encode(this, options);
+//    }
 }

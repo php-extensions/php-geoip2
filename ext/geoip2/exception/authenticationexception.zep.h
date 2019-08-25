@@ -1,0 +1,5 @@
+
+extern zend_class_entry *geoip2_exception_authenticationexception_ce;
+
+ZEPHIR_INIT_CLASS(GeoIP2_Exception_AuthenticationException);
+

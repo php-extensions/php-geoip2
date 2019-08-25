@@ -1,21 +1,13 @@
-
 /*
-  +------------------------------------------------------------------------+
-  | Zephir Language                                                        |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2017 Zephir Team (https://www.zephir-lang.com)      |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file docs/LICENSE.txt.                        |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@zephir-lang.com so we can send you a copy immediately.      |
-  +------------------------------------------------------------------------+
-  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
-  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
-  +------------------------------------------------------------------------+
-*/
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code. If you did not receive
+ * a copy of the license it is available through the world-wide-web at the
+ * following url: https://docs.zephir-lang.com/en/latest/license
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +23,7 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
+#include "kernel/object.h"
 #include "kernel/exception.h"
 
 
@@ -40,7 +33,9 @@ zend_string* i_self   = NULL;
 
 int zephir_is_iterable_ex(zval *arr, int duplicate)
 {
-	if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
+	if (UNEXPECTED(Z_TYPE_P(arr) == IS_OBJECT && zephir_instance_of_ev(arr, (const zend_class_entry *)zend_ce_iterator))) {
+		return 1;
+	} else if (UNEXPECTED(Z_TYPE_P(arr) != IS_ARRAY)) {
 		return 0;
 	}
     //TODO: duplicate
@@ -90,9 +85,10 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 /**
  * Gets the global zval into PG macro
  */
-int zephir_get_global(zval **arr, const char *global, unsigned int global_length)
+int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 {
 	zval *gv;
+	zend_array *symbol_table;
 	zend_bool jit_initialization = PG(auto_globals_jit);
 	zend_string *str = zend_string_init(global, global_length, 0);
 
@@ -104,14 +100,27 @@ int zephir_get_global(zval **arr, const char *global, unsigned int global_length
 		if ((gv = zend_hash_find_ind(&EG(symbol_table), str)) != NULL) {
 			ZVAL_DEREF(gv);
 			if (Z_TYPE_P(gv) == IS_ARRAY) {
-				*arr = gv;
+				if (Z_REFCOUNTED_P(gv)) {
+					ZVAL_COPY_VALUE(arr, gv);
+					Z_SET_REFCOUNT_P(arr, 1);
+				} else {
+					ZVAL_DUP(arr, gv);
+					zend_hash_update(&EG(symbol_table), str, arr);
+				}
 				zend_string_release(str);
 				return SUCCESS;
 			}
 		}
 	}
 
-	*arr = NULL;
+	array_init(arr);
+	if (!(&EG(symbol_table))) {
+		symbol_table = zend_rebuild_symbol_table();
+	} else {
+		symbol_table = &EG(symbol_table);
+	}
+	zend_hash_update(symbol_table, str, arr);
+
 	zend_string_release(str);
 	return FAILURE;
 }
@@ -128,9 +137,7 @@ void zephir_fast_count(zval *result, zval *value)
 
 	if (Z_TYPE_P(value) == IS_OBJECT) {
 
-		#ifdef HAVE_SPL
 		zval retval;
-		#endif
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
 			ZVAL_LONG(result, 1);
@@ -139,7 +146,6 @@ void zephir_fast_count(zval *result, zval *value)
 			}
 		}
 
-		#ifdef HAVE_SPL
 		if (instanceof_function(Z_OBJCE_P(value), spl_ce_Countable)) {
 			zend_call_method_with_0_params(value, NULL, NULL, "count", &retval);
 			if (Z_TYPE(retval) != IS_UNDEF) {
@@ -149,7 +155,6 @@ void zephir_fast_count(zval *result, zval *value)
 			}
 			return;
 		}
-		#endif
 
 		ZVAL_LONG(result, 0);
 		return;
@@ -176,16 +181,13 @@ int zephir_fast_count_ev(zval *value)
 
 	if (Z_TYPE_P(value) == IS_OBJECT) {
 
-		#ifdef HAVE_SPL
 		zval retval;
-		#endif
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
 			Z_OBJ_HT(*value)->count_elements(value, &count);
 			return (int) count > 0;
 		}
 
-		#ifdef HAVE_SPL
 		if (instanceof_function(Z_OBJCE_P(value), spl_ce_Countable)) {
 			zend_call_method_with_0_params(value, NULL, NULL, "count", &retval);
 			if (Z_TYPE(retval) != IS_UNDEF) {
@@ -196,7 +198,6 @@ int zephir_fast_count_ev(zval *value)
 			}
 			return 0;
 		}
-		#endif
 
 		return 0;
 	}
@@ -221,16 +222,13 @@ int zephir_fast_count_int(zval *value)
 
 	if (Z_TYPE_P(value) == IS_OBJECT) {
 
-		#ifdef HAVE_SPL
 		zval retval;
-		#endif
 
 		if (Z_OBJ_HT_P(value)->count_elements) {
 			Z_OBJ_HT(*value)->count_elements(value, &count);
 			return (int) count;
 		}
 
-		#ifdef HAVE_SPL
 		if (instanceof_function(Z_OBJCE_P(value), spl_ce_Countable)) {
 			zend_call_method_with_0_params(value, NULL, NULL, "count", &retval);
 			if (Z_TYPE(retval) != IS_UNDEF) {
@@ -241,7 +239,6 @@ int zephir_fast_count_int(zval *value)
 			}
 			return 0;
 		}
-		#endif
 
 		return 0;
 	}
@@ -395,7 +392,24 @@ zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int cl
 /* Declare constants */
 int zephir_declare_class_constant(zend_class_entry *ce, const char *name, size_t name_length, zval *value)
 {
-#if PHP_VERSION_ID >= 70100
+#if PHP_VERSION_ID >= 70200
+	int ret;
+	zend_string *key;
+
+	if (ce->type == ZEND_INTERNAL_CLASS) {
+		key = zend_string_init_interned(name, name_length, 1);
+	} else {
+		key = zend_string_init(name, name_length, 0);
+	}
+
+	zend_declare_class_constant_ex(ce, key, value, ZEND_ACC_PUBLIC, NULL);
+
+	if (ce->type != ZEND_INTERNAL_CLASS) {
+		zend_string_release(key);
+	}
+
+	return ret;
+#elif PHP_VERSION_ID >= 70100
 	int ret;
 
 	zend_string *key = zend_string_init(name, name_length, ce->type & ZEND_INTERNAL_CLASS);
@@ -457,7 +471,34 @@ int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name,
 	return zephir_declare_class_constant_stringl(ce, name, name_length, value, strlen(value));
 }
 
-void zephir_get_args(zval *return_value)
+/**
+ * Check is PHP Version equals to Runtime PHP Version
+ */
+int zephir_is_php_version(unsigned int id)
+{
+	int php_major = PHP_MAJOR_VERSION * 10000;
+	int php_minor = PHP_MINOR_VERSION * 100;
+	int php_release = PHP_RELEASE_VERSION;
+
+	int zep_major = id / 10000;
+	int zep_minor = id / 100 - zep_major * 100;
+	int zep_release = id - (zep_major * 10000 + zep_minor * 100);
+
+	if (zep_minor == 0)
+	{
+		php_minor = 0;
+	}
+
+	if (zep_release == 0)
+	{
+		php_release = 0;
+	}
+
+	return ((php_major + php_minor + php_release) == id ? 1 : 0);
+}
+
+void
+zephir_get_args(zval *return_value)
 {
 	zend_execute_data *ex = EG(current_execute_data);
 	uint32_t arg_count    = ZEND_CALL_NUM_ARGS(ex);
@@ -482,7 +523,7 @@ void zephir_get_args(zval *return_value)
 				++i;
 			}
 
-			p = ZEND_CALL_VAR_NUM(ex, ex->func->op_array.last_var + ex->func->op_array.T);
+			p = ZEND_CALL_VAR_NUM(ex, i);
 		}
 
 		while (i < arg_count) {
@@ -500,30 +541,31 @@ void zephir_get_args(zval *return_value)
 	}
 }
 
-void zephir_get_arg(zval *return_value, zend_long idx)
+void
+zephir_get_arg(zval *return_value, zend_long idx)
 {
 	zend_execute_data *ex = EG(current_execute_data);
-	uint32_t arg_count    = ZEND_CALL_NUM_ARGS(ex);
+	uint32_t arg_count;
 	zval *arg;
-	uint32_t first_extra_arg;
 
 	if (UNEXPECTED(idx < 0)) {
-		zend_error(E_WARNING, "zephir_get_arg():  The argument number should be >= 0");
+		zend_error(E_WARNING, "func_get_arg():  The argument number should be >= 0");
 		RETURN_FALSE;
 	}
+
+	arg_count = ZEND_CALL_NUM_ARGS(ex);
+#if PHP_VERSION_ID >= 70100
+	if (zend_forbid_dynamic_call("func_get_arg()") == FAILURE) {
+		RETURN_FALSE;
+	}
+#endif
 
 	if (UNEXPECTED((zend_ulong)idx >= arg_count)) {
-		zend_error(E_WARNING, "zephir_get_arg():  Argument " ZEND_LONG_FMT " not passed to function", idx);
+		zend_error(E_WARNING, "func_get_arg():  Argument " ZEND_LONG_FMT " not passed to function", idx);
 		RETURN_FALSE;
 	}
 
-	first_extra_arg = ex->func->op_array.num_args;
-	if ((zend_ulong)idx >= first_extra_arg && (arg_count > first_extra_arg)) {
-		arg = ZEND_CALL_VAR_NUM(ex, ex->func->op_array.last_var + ex->func->op_array.T) + (idx - first_extra_arg);
-	}
-	else {
-		arg = ZEND_CALL_VAR_NUM(ex, idx);
-	}
+	arg = ZEND_CALL_VAR_NUM(ex, idx);
 
 	if (EXPECTED(!Z_ISUNDEF_P(arg))) {
 		ZVAL_DEREF(arg);

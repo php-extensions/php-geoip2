@@ -29,7 +29,6 @@ class Country extends AbstractModel
     protected continent;
     protected country;
     protected locales;
-    //protected maxmind;
     protected registeredCountry;
     protected representedCountry;
     protected traits;
@@ -51,7 +50,6 @@ class Country extends AbstractModel
             this->get("country"),
             locales
         );
-        //let this->maxmind = new \GeoIp2\Record\MaxMind($this->get("maxmind"));
         let this->registeredCountry = new \GeoIp2\Record\Country(
             this->get("registered_country"),
             locales

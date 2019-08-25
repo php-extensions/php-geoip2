@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>/index.html</loc>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+        <lastmod>2019-08-25</lastmod>
+    </url>
+
+    <url>
+        <loc>/namespaces.html</loc>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+        <lastmod>2019-08-25</lastmod>
+    </url>
+
+    <url>
+        <loc>/classes.html</loc>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+        <lastmod>2019-08-25</lastmod>
+    </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/AbstractModel.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/AbstractModel.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/AbstractRecord.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/AbstractRecord.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Exception/GeoIP2Exception.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Exception/GeoIP2Exception.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/AbstractPlaceRecord.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/AbstractPlaceRecord.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/Country.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/Country.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/City.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/City.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Exception/HttpException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Exception/HttpException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/ProviderInterface.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/ProviderInterface.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/Country.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/Country.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Database/Reader.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Database/Reader.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Database/Reader/Metadata.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Database/Reader/Metadata.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Exception/AddressNotFoundException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Exception/AddressNotFoundException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Exception/AuthenticationException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Exception/AuthenticationException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Exception/InvalidDatabaseException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Exception/InvalidDatabaseException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Exception/InvalidRequestException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Exception/InvalidRequestException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Exception/OutOfQueriesException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Exception/OutOfQueriesException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/MaxMind/Db/Reader.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/MaxMind/Db/Reader.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/MaxMind/Db/Reader/Decoder.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/MaxMind/Db/Reader/Decoder.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/MaxMind/Db/Reader/InvalidDatabaseException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/MaxMind/Db/Reader/InvalidDatabaseException.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/MaxMind/Db/Reader/Metadata.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/MaxMind/Db/Reader/Metadata.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/MaxMind/Db/Reader/Util.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/MaxMind/Db/Reader/Util.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/AnonymousIp.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/AnonymousIp.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/Asn.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/Asn.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/ConnectionType.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/ConnectionType.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/Custom.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/Custom.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/Domain.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/Domain.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/Enterprise.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/Enterprise.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/Insights.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/Insights.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Model/Isp.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Model/Isp.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/City.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/City.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/Continent.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/Continent.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/Location.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/Location.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/MaxMind.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/MaxMind.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/Postal.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/Postal.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/RepresentedCountry.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/RepresentedCountry.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/Subdivision.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/Subdivision.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+            <url>
+            <loc>/class/GeoIP2/Record/Traits.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+        <url>
+            <loc>/source/GeoIP2/Record/Traits.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+
+    
+            <url>
+            <loc>/namespace/GeoIP2.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+            <url>
+            <loc>/namespace/GeoIP2/Model.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+            <url>
+            <loc>/namespace/GeoIP2/Record.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+            <url>
+            <loc>/namespace/GeoIP2/Exception.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+            <url>
+            <loc>/namespace/GeoIP2/Database.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+            <url>
+            <loc>/namespace/GeoIP2/Database/Reader.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+            <url>
+            <loc>/namespace/GeoIP2/MaxMind.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+            <url>
+            <loc>/namespace/GeoIP2/MaxMind/Db.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+            <url>
+            <loc>/namespace/GeoIP2/MaxMind/Db/Reader.html</loc>
+            <changefreq>daily</changefreq>
+            <priority>1</priority>
+            <lastmod>2019-08-25</lastmod>
+        </url>
+    
+</urlset>

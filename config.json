@@ -1,4 +1,14 @@
 {
+    "namespace": "geoip2",
+    "name": "geoip2",
+    "description": "GeoIP2 PHP API",
+    "author": "github.com/php-extensions",
+    "version": "0.9.2",
+    "verbose": false,
+    "requires": {
+        "extensions": []
+    },
+
     "stubs": {
         "path": "ide\/%version%\/%namespace%\/",
         "stubs-run-after-generate": false
@@ -52,13 +62,7 @@
         "check-invalid-reads": false,
         "internal-call-transformation": false
     },
-    "namespace": "geoip2",
-    "name": "geoip2",
-    "description": "GeoIP2 PHP API",
-    "author": "github.com/php-extensions",
-    "version": "0.9.1",
-    "verbose": false,
-    "requires": {
-        "extensions": ["maxminddb", "json"]
-    }
+
+    "extra-classes": [
+    ]
 }

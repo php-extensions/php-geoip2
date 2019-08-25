@@ -35,6 +35,7 @@ abstract class AbstractRecord implements \JsonSerializable
         }
         throw new \RuntimeException("Unknown attribute: " . attr);
     }
+
     public function getName(string name)
     {
         if isset this->record["names"][name] {
@@ -62,8 +63,8 @@ abstract class AbstractRecord implements \JsonSerializable
     {
         return this->record;
     }
-    public function json(int options = 0)
-    {
-        return json_encode(this, options);
-    }
+//    public function json(int options = 0)
+//    {
+//        return json_encode(this->record, options);
+//    }
 }

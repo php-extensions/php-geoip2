@@ -1,22 +1,13 @@
-
 /*
-  +------------------------------------------------------------------------+
-  | Zephir Language                                                        |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2017 Zephir Team (http://www.zephir-lang.com)       |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file docs/LICENSE.txt.                        |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@zephir-lang.com so we can send you a copy immediately.      |
-  +------------------------------------------------------------------------+
-  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
-  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
-  |          Vladimir Kolesnikov <vladimir@extrememember.com>              |
-  +------------------------------------------------------------------------+
-*/
+ * This file is part of the Zephir.
+ *
+ * (c) Zephir Team <team@zephir-lang.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code. If you did not receive
+ * a copy of the license it is available through the world-wide-web at the
+ * following url: https://docs.zephir-lang.com/en/latest/license
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +17,7 @@
 #include "php_ext.h"
 
 #include <Zend/zend_closures.h>
+#include <Zend/zend_string.h>
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
@@ -353,14 +345,13 @@ int zephir_clone(zval *destination, zval *obj)
 		clone_call =  Z_OBJ_HT_P(obj)->clone_obj;
 		if (!clone_call) {
 			if (ce) {
-				php_error_docref(NULL, E_ERROR, "Trying to clone an uncloneable object of class %s", ce->name);
+				php_error_docref(NULL, E_ERROR, "Trying to clone an uncloneable object of class %s", ZSTR_VAL(ce->name));
 			} else {
 				php_error_docref(NULL, E_ERROR, "Trying to clone an uncloneable object");
 			}
 			status = FAILURE;
 		} else {
 			if (!EG(exception)) {
-				//zval_ptr_dtor(destination);
 				ZVAL_OBJ(destination, clone_call(obj));
 				if (EG(exception)) {
 					zval_ptr_dtor(destination);
@@ -378,10 +369,32 @@ int zephir_clone(zval *destination, zval *obj)
 int zephir_isset_property(zval *object, const char *property_name, unsigned int property_length)
 {
 	if (Z_TYPE_P(object) == IS_OBJECT) {
+		/*
+		if (Z_OBJ_HANDLER_P(object, has_property)) {
+			zval member;
+			int retval;
+			ZVAL_STRINGL(&member, property_name, property_length);
+			retval = Z_OBJ_HT_P(object)->has_property(object, &member, 2, NULL);
+			zval_ptr_dtor(&member);
+			return retval;
+		}
+		*/
 		if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length))) {
 			return 1;
 		}
-		return zend_hash_str_exists(Z_OBJ_HT_P(object)->get_properties(object), property_name, property_length);
+#if PHP_VERSION_ID >= 80000
+		return zend_hash_str_exists(
+			Z_OBJ_HT_P(object)->get_properties(Z_OBJ_P(object)),
+			property_name,
+			property_length
+		);
+#else
+		return zend_hash_str_exists(
+			Z_OBJ_HT_P(object)->get_properties(object),
+			property_name,
+			property_length
+		);
+#endif
 	}
 
 	return 0;
@@ -394,11 +407,28 @@ int zephir_isset_property_zval(zval *object, const zval *property)
 {
 	if (Z_TYPE_P(object) == IS_OBJECT) {
 		if (Z_TYPE_P(property) == IS_STRING) {
-
+			/*
+			if (Z_OBJ_HANDLER_P(object, has_property)) {
+				return Z_OBJ_HT_P(object)->has_property(object, property, 2, NULL);
+			}
+			*/
 			if (EXPECTED(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property)))) {
 				return 1;
 			} else {
-				return zend_hash_str_exists(Z_OBJ_HT_P(object)->get_properties(object), Z_STRVAL_P(property), Z_STRLEN_P(property));
+
+#if PHP_VERSION_ID >= 80000
+				return zend_hash_str_exists(
+					Z_OBJ_HT_P(object)->get_properties(Z_OBJ_P(object)),
+					Z_STRVAL_P(property),
+					Z_STRLEN_P(property)
+				);
+#else
+				return zend_hash_str_exists(
+					Z_OBJ_HT_P(object)->get_properties(object),
+					Z_STRVAL_P(property),
+					Z_STRLEN_P(property)
+				);
+#endif
 			}
 		}
 	}
@@ -412,9 +442,17 @@ static inline zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce, con
 	zend_property_info *info;
 
 	while (ce) {
-		if ((info = zend_hash_str_find_ptr(&ce->properties_info, property_name, property_length)) != NULL && (info->flags & ZEND_ACC_SHADOW) != ZEND_ACC_SHADOW)  {
+		info = zend_hash_str_find_ptr(&ce->properties_info, property_name, property_length);
+
+#if PHP_VERSION_ID < 70400
+		if (info != NULL && (info->flags & ZEND_ACC_SHADOW) != ZEND_ACC_SHADOW)  {
 			return ce;
 		}
+#else
+		if (info != NULL)  {
+			return ce;
+		}
+#endif
 		ce = ce->parent;
 	}
 	return original_ce;
@@ -445,15 +483,16 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 
 	ce = Z_OBJCE_P(object);
 
+	if (ce->parent) {
+		ce = zephir_lookup_class_ce(ce, property_name, property_length);
+	}
+
 #if PHP_VERSION_ID >= 70100
 	old_scope = EG(fake_scope);
 	EG(fake_scope) = ce;
 #else
 	old_scope = EG(scope);
 	EG(scope) = ce;
-	if (ce->parent) {
-		ce = zephir_lookup_class_ce(ce, property_name, property_length);
-	}
 #endif
 
 	if (!Z_OBJ_HT_P(object)->read_property) {
@@ -546,7 +585,7 @@ int zephir_read_property_zval(zval *result, zval *object, zval *property, int fl
 int zephir_update_property_zval(zval *object, const char *property_name, unsigned int property_length, zval *value)
 {
 	zend_class_entry *ce, *old_scope;
-	zval property;
+	zval property, sep_value;
 
 #if PHP_VERSION_ID >= 70100
 	old_scope = EG(fake_scope);
@@ -578,9 +617,18 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 	}
 
 	ZVAL_STRINGL(&property, property_name, property_length);
+	ZVAL_COPY_VALUE(&sep_value, value);
+	if (Z_TYPE(sep_value) == IS_ARRAY) {
+		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR(sep_value)));
+		if (EXPECTED(!(GC_FLAGS(Z_ARRVAL(sep_value)) & IS_ARRAY_IMMUTABLE))) {
+			if (UNEXPECTED(GC_REFCOUNT(Z_ARR(sep_value)) > 0)) {
+				GC_DELREF(Z_ARR(sep_value));
+			}
+		}
+	}
 
 	/* write_property will add 1 to refcount, so no Z_TRY_ADDREF_P(value); is necessary */
-	Z_OBJ_HT_P(object)->write_property(object, &property, value, 0);
+	Z_OBJ_HT_P(object)->write_property(object, &property, &sep_value, 0);
 	zval_ptr_dtor(&property);
 
 #if PHP_VERSION_ID >= 70100
@@ -609,54 +657,70 @@ int zephir_update_property_zval_zval(zval *object, zval *property, zval *value)
  */
 int zephir_update_property_array(zval *object, const char *property, zend_uint property_length, const zval *index, zval *value)
 {
-	zval tmp;
+	zval tmp, sep_value;
 	int separated = 0;
 
-	if (Z_TYPE_P(object) == IS_OBJECT) {
-		zephir_read_property(&tmp, object, property, property_length, PH_NOISY | PH_READONLY);
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		return SUCCESS;
+	}
 
-		/** Separation only when refcount > 1 */
-		if (Z_REFCOUNTED(tmp)) {
-			if (Z_REFCOUNT(tmp) > 1) {
-				if (!Z_ISREF(tmp)) {
-					zval new_zv;
-					ZVAL_DUP(&new_zv, &tmp);
-					ZVAL_COPY_VALUE(&tmp, &new_zv);
-					Z_TRY_DELREF(new_zv);
-					separated = 1;
-				}
+	zephir_read_property(&tmp, object, property, property_length, PH_NOISY | PH_READONLY);
+
+	/** Separation only when refcount > 1 */
+	if (Z_REFCOUNTED(tmp)) {
+		if (Z_REFCOUNT(tmp) > 1) {
+			if (!Z_ISREF(tmp)) {
+				zval new_zv;
+				ZVAL_DUP(&new_zv, &tmp);
+				ZVAL_COPY_VALUE(&tmp, &new_zv);
+				Z_TRY_DELREF(new_zv);
+				Z_ADDREF(tmp);
+				separated = 1;
 			}
+		}
+	} else {
+		zval new_zv;
+		ZVAL_DUP(&new_zv, &tmp);
+		ZVAL_COPY_VALUE(&tmp, &new_zv);
+		Z_TRY_DELREF(new_zv);
+		separated = 1;
+	}
+
+	/** Convert the value to array if not is an array */
+	if (Z_TYPE(tmp) != IS_ARRAY) {
+		if (separated) {
+			convert_to_array(&tmp);
 		} else {
-			zval new_zv;
-			ZVAL_DUP(&new_zv, &tmp);
-			ZVAL_COPY_VALUE(&tmp, &new_zv);
-			Z_TRY_DELREF(new_zv);
+			array_init(&tmp);
 			separated = 1;
 		}
 
-		/** Convert the value to array if not is an array */
-		if (Z_TYPE(tmp) != IS_ARRAY) {
-			if (separated) {
-				convert_to_array(&tmp);
-			} else {
-				array_init(&tmp);
-				separated = 1;
+		if (Z_REFCOUNTED(tmp)) {
+			if (Z_REFCOUNT(tmp) > 1) {
+				if (!Z_ISREF(tmp)) {
+					Z_DELREF(tmp);
+				}
 			}
-			Z_DELREF(tmp);
 		}
-		Z_TRY_ADDREF_P(value);
+	}
 
-		if (Z_TYPE_P(index) == IS_STRING) {
-			zend_symtable_str_update(Z_ARRVAL(tmp), Z_STRVAL_P(index), Z_STRLEN_P(index), value);
-		} else if (Z_TYPE_P(index) == IS_LONG) {
-			zend_hash_index_update(Z_ARRVAL(tmp), Z_LVAL_P(index), value);
-		} else if (Z_TYPE_P(index) == IS_NULL) {
-			zend_hash_next_index_insert(Z_ARRVAL(tmp), value);
-		}
+	if (Z_TYPE_P(value) == IS_ARRAY) {
+		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR_P(value)));
+	} else {
+		ZVAL_COPY(&sep_value, value);
+	}
 
-		if (separated) {
-			zephir_update_property_zval(object, property, property_length, &tmp);
-		}
+	if (Z_TYPE_P(index) == IS_STRING) {
+		zend_symtable_str_update(Z_ARRVAL(tmp), Z_STRVAL_P(index), Z_STRLEN_P(index), &sep_value);
+	} else if (Z_TYPE_P(index) == IS_LONG) {
+		zend_hash_index_update(Z_ARRVAL(tmp), Z_LVAL_P(index), &sep_value);
+	} else if (Z_TYPE_P(index) == IS_NULL) {
+		zend_hash_next_index_insert(Z_ARRVAL(tmp), &sep_value);
+	}
+
+	if (separated) {
+		zephir_update_property_zval(object, property, property_length, &tmp);
+		zephir_ptr_dtor(&tmp);
 	}
 
 	return SUCCESS;
@@ -668,7 +732,7 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
  */
 int zephir_update_property_array_append(zval *object, char *property, unsigned int property_length, zval *value)
 {
-	zval tmp;
+	zval tmp, sep_value;
 	int separated = 0;
 
 	ZVAL_UNDEF(&tmp);
@@ -677,9 +741,7 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 		return SUCCESS;
 	}
 
-	zephir_read_property(&tmp, object, property, property_length, PH_NOISY_CC);
-
-	Z_TRY_DELREF(tmp);
+	zephir_read_property(&tmp, object, property, property_length, PH_NOISY | PH_READONLY);
 
 	/** Separation only when refcount > 1 */
 	if (Z_REFCOUNTED(tmp)) {
@@ -708,14 +770,27 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 			array_init(&tmp);
 			separated = 1;
 		}
-		Z_DELREF(tmp);
+
+		if (Z_REFCOUNTED(tmp)) {
+			if (Z_REFCOUNT(tmp) > 1) {
+				if (!Z_ISREF(tmp)) {
+					Z_DELREF(tmp);
+				}
+			}
+		}
 	}
 
-	Z_TRY_ADDREF_P(value);
-	add_next_index_zval(&tmp, value);
+	if (Z_TYPE_P(value) == IS_ARRAY) {
+		ZVAL_ARR(&sep_value, zend_array_dup(Z_ARR_P(value)));
+	} else {
+		ZVAL_COPY(&sep_value, value);
+	}
+
+	add_next_index_zval(&tmp, &sep_value);
 
 	if (separated) {
 		zephir_update_property_zval(object, property, property_length, &tmp);
+		zephir_ptr_dtor(&tmp);
 	}
 
 	return SUCCESS;
@@ -741,6 +816,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 					ZVAL_DUP(&new_zv, &tmp_arr);
 					ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
 					Z_TRY_DELREF(new_zv);
+					Z_ADDREF(tmp_arr);
 					separated = 1;
 				}
 			}
@@ -760,7 +836,14 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 				array_init(&tmp_arr);
 				separated = 1;
 			}
-			Z_DELREF(tmp_arr);
+
+			if (Z_REFCOUNTED(tmp_arr)) {
+				if (Z_REFCOUNT(tmp_arr) > 1) {
+					if (!Z_ISREF(tmp_arr)) {
+						Z_DELREF(tmp_arr);
+					}
+				}
+			}
 		}
 
 		va_start(ap, types_count);
@@ -769,6 +852,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 
 		if (separated) {
 			zephir_update_property_zval(object, property, property_length, &tmp_arr);
+			zephir_ptr_dtor(&tmp_arr);
 		}
 	}
 
@@ -939,6 +1023,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 				ZVAL_DUP(&new_zv, &tmp_arr);
 				ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
 				Z_TRY_DELREF(new_zv);
+				Z_ADDREF(tmp_arr);
 				separated = 1;
 			}
 		}
@@ -958,7 +1043,13 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 			array_init(&tmp_arr);
 			separated = 1;
 		}
-		Z_DELREF(tmp_arr);
+		if (Z_REFCOUNTED(tmp_arr)) {
+			if (Z_REFCOUNT(tmp_arr) > 1) {
+				if (!Z_ISREF(tmp_arr)) {
+					Z_DELREF(tmp_arr);
+				}
+			}
+		}
 	}
 
 	va_start(ap, types_count);
@@ -968,6 +1059,14 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 
 	if (separated) {
 		zend_update_static_property(ce, property, property_length, &tmp_arr);
+	}
+
+	if (Z_REFCOUNTED(tmp_arr)) {
+		if (Z_REFCOUNT(tmp_arr) > 1) {
+			if (!Z_ISREF(tmp_arr)) {
+				Z_DELREF(tmp_arr);
+			}
+		}
 	}
 
 	return SUCCESS;
@@ -1038,7 +1137,11 @@ typedef struct _zend_closure {
 	zend_function     func;
 	zval              this_ptr;
 	zend_class_entry *called_scope;
+#if PHP_VERSION_ID >= 70300
+	zif_handler       orig_internal_handler;
+#else
 	void (*orig_internal_handler)(INTERNAL_FUNCTION_PARAMETERS);
+#endif
 } zend_closure;
 
 /**
@@ -1079,7 +1182,10 @@ int zephir_create_instance(zval *return_value, const zval *class_name)
 		return FAILURE;
 	}
 
-	object_init_ex(return_value, ce);
+	if(UNEXPECTED(object_init_ex(return_value, ce) != SUCCESS)) {
+    	return FAILURE;
+    }
+
 	if (EXPECTED(Z_OBJ_HT_P(return_value)->get_constructor)) {
 		zend_object* obj    = Z_OBJ_P(return_value);
 		zend_function* ctor = Z_OBJ_HT_P(return_value)->get_constructor(obj);
@@ -1101,7 +1207,9 @@ int zephir_create_instance(zval *return_value, const zval *class_name)
 			fci.no_separation    = 1;
 			ZVAL_NULL(&fci.function_name);
 
+#if PHP_VERSION_ID < 70300
 			fcc.initialized      = 1;
+#endif
 			fcc.object           = obj;
 			fcc.called_scope     = ce;
 			fcc.calling_scope    = ce;
@@ -1137,7 +1245,9 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, zv
 		return FAILURE;
 	}
 
-	object_init_ex(return_value, ce);
+	if(UNEXPECTED(object_init_ex(return_value, ce) != SUCCESS)) {
+    	return FAILURE;
+    }
 
 	if (EXPECTED(Z_OBJ_HT_P(return_value)->get_constructor)) {
 		zend_object* obj    = Z_OBJ_P(return_value);
@@ -1161,7 +1271,9 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, zv
 			fci.no_separation    = 1;
 			ZVAL_NULL(&fci.function_name);
 
+#if PHP_VERSION_ID < 70300
 			fcc.initialized      = 1;
+#endif
 			fcc.object           = obj;
 			fcc.called_scope     = ce;
 			fcc.calling_scope    = ce;

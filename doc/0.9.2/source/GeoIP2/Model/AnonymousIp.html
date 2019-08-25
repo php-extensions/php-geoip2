@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta content="geoip2 API doc" name="description">
+    <title>
+                    geoip2 API Documentation
+            </title>
+    <link rel="stylesheet" type="text/css" href="../../../asset/static/prettify.css" />
+
+<script src="../../../asset/static/prettify.js"></script>
+<script src="../../../asset/api_definition.js"></script>
+
+
+                        <link rel="stylesheet" type="text/css" href="../../../asset/static/prettify.css" />
+                    <link rel="stylesheet" type="text/css" href="../../../asset/static/zephir-theme.css" />
+            
+    
+
+                        <script src="../../../asset/static/prettify.js"></script>
+                                    <script src="../../../asset/api_definition.js"></script>
+                    <script src="../../../asset/static/jquery.min.js"></script>
+                    <script src="../../../asset/static/zephir-doc.js"></script>
+                <script>var ZepCurrentPath = '../../../'</script>
+    </head>
+ <body onload="prettyPrint()">
+        <div id="top-bar">
+            <div id="top-left">
+                                    geoip2 Documentation <span class="version">v0.9.2</span>
+                            </div>
+            <div id="top-right">
+            </div>
+        </div>
+        <div id="body">
+            <div id="body-left">
+                <div class="header-search">
+                    <input class="search-box" placeholder="Search for a class or namespace " type="text" />
+                    <div id="menu-wrapper">
+                    </div>
+                </div>
+            </div>
+            <div id="body-right">
+                <div class="content">
+                    
+<div class="breadcrumb">
+    
+    <ul>
+        
+        <li><a href="../../../index.html">Home</a></li>
+        
+                <li><a href="../../../classes.html">Classes</a></li>
+                <li><a href="../../../class/GeoIP2/Model/AnonymousIp.html">GeoIP2\Model\AnonymousIp</a></li>
+                <li><a >Source</a></li>
+                
+    </ul>
+    
+</div>
+<div class="class-header source clearfix">
+    
+    <div class="access-buttons">
+        <a class="zep-button" href="../../../class/GeoIP2/Model/AnonymousIp.html">Class</a>
+
+            </div>
+    
+    <div class="class-full-name">
+        
+        <span class="class-type">Class</span>
+        
+                <span class="namespace-piece">
+            <a href="../../../namespace/GeoIP2.html">GeoIP2</a>
+        </span>
+                <span class="namespace-piece">
+            <a href="../../../namespace/GeoIP2/Model.html">Model</a>
+        </span>
+                <h1 class="class-name">AnonymousIp</h1>
+    </div>
+    
+</div>
+
+
+<pre class="zephir-source-file prettyprint linenums">namespace GeoIP2\Model;
+/**
+ * This class provides the GeoIP2 Anonymous IP model.
+ *
+ * @property-read bool isAnonymous This is true if the IP address belongs to
+ *     any sort of anonymous network.
+ * @property-read bool isAnonymousVpn This is true if the IP address belongs to
+ *     an anonymous VPN system.
+ * @property-read bool isHostingProvider This is true if the IP address belongs
+ *     to a hosting provider.
+ * @property-read bool isPublicProxy This is true if the IP address belongs to
+ *     a public proxy.
+ * @property-read bool isTorExitNode This is true if the IP address is a Tor
+ *     exit node.
+ * @property-read string ipAddress The IP address that the data in the model is
+ *     for.
+ */
+class AnonymousIp extends AbstractModel
+{
+    protected isAnonymous;
+    protected isAnonymousVpn;
+    protected isHostingProvider;
+    protected isPublicProxy;
+    protected isTorExitNode;
+    protected ipAddress;
+    /**
+     * @ignore
+     *
+     * @param mixed raw
+     */
+    public function __construct(var raw)
+    {
+        parent::__construct(raw);
+        let this->isAnonymous = this->get("is_anonymous");
+        let this->isAnonymousVpn = this->get("is_anonymous_vpn");
+        let this->isHostingProvider = this->get("is_hosting_provider");
+        let this->isPublicProxy = this->get("is_public_proxy");
+        let this->isTorExitNode = this->get("is_tor_exit_node");
+        let this->ipAddress = this->get("ip_address");
+    }
+}</pre>                </div>
+            </div>
+        </div>
+    </body>
+</html>

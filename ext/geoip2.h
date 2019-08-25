@@ -1,0 +1,45 @@
+
+/* This file was generated automatically by Zephir do not modify it! */
+
+#ifndef ZEPHIR_CLASS_ENTRIES_H
+#define ZEPHIR_CLASS_ENTRIES_H
+
+#include "geoip2/model/abstractmodel.zep.h"
+#include "geoip2/record/abstractrecord.zep.h"
+#include "geoip2/exception/geoip2exception.zep.h"
+#include "geoip2/record/abstractplacerecord.zep.h"
+#include "geoip2/model/country.zep.h"
+#include "geoip2/model/city.zep.h"
+#include "geoip2/exception/httpexception.zep.h"
+#include "geoip2/providerinterface.zep.h"
+#include "geoip2/record/country.zep.h"
+#include "geoip2/database/reader.zep.h"
+#include "geoip2/database/reader/metadata.zep.h"
+#include "geoip2/exception/addressnotfoundexception.zep.h"
+#include "geoip2/exception/authenticationexception.zep.h"
+#include "geoip2/exception/invaliddatabaseexception.zep.h"
+#include "geoip2/exception/invalidrequestexception.zep.h"
+#include "geoip2/exception/outofqueriesexception.zep.h"
+#include "geoip2/maxmind/db/reader.zep.h"
+#include "geoip2/maxmind/db/reader/decoder.zep.h"
+#include "geoip2/maxmind/db/reader/invaliddatabaseexception.zep.h"
+#include "geoip2/maxmind/db/reader/metadata.zep.h"
+#include "geoip2/maxmind/db/reader/util.zep.h"
+#include "geoip2/model/anonymousip.zep.h"
+#include "geoip2/model/asn.zep.h"
+#include "geoip2/model/connectiontype.zep.h"
+#include "geoip2/model/custom.zep.h"
+#include "geoip2/model/domain.zep.h"
+#include "geoip2/model/enterprise.zep.h"
+#include "geoip2/model/insights.zep.h"
+#include "geoip2/model/isp.zep.h"
+#include "geoip2/record/city.zep.h"
+#include "geoip2/record/continent.zep.h"
+#include "geoip2/record/location.zep.h"
+#include "geoip2/record/maxmind.zep.h"
+#include "geoip2/record/postal.zep.h"
+#include "geoip2/record/representedcountry.zep.h"
+#include "geoip2/record/subdivision.zep.h"
+#include "geoip2/record/traits.zep.h"
+
+#endif
